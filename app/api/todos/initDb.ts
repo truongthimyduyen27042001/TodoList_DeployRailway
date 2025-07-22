@@ -1,18 +1,25 @@
-import { db } from "./db.js";
+import { db } from "./db";
 
-async function createTable() {
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS todos (
-      id SERIAL PRIMARY KEY,
-      text VARCHAR(255) NOT NULL,
-      completed BOOLEAN DEFAULT FALSE
-    );
-  `);
-  console.log("Table 'todos' created (if not exists).");
-  process.exit();
+export async function initDatabase() {
+  try {
+    // Create todos table if it doesn't exist
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS todos (
+        id SERIAL PRIMARY KEY,
+        text TEXT NOT NULL,
+        completed BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('Database initialized successfully');
+  } catch (error) {
+    console.error('Database initialization error:', error);
+    throw error;
+  }
 }
 
-createTable();
+// Auto-initialize on import
+initDatabase().catch(console.error);
 
 
 

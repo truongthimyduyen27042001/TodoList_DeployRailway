@@ -1,4 +1,5 @@
 import { db } from "./db";
+import "./initDb"; // Auto-initialize database
 
 export const GET = async () => {
   try {
@@ -18,6 +19,7 @@ export const POST = async (request: Request) => {
     }
     return Response.json({data: todo.rows[0], message: "Todo created successfully"}, { status: 201 });
   } catch (error) {
+    console.error("Create todo error:", error);
     return Response.json({ error: "Failed to create todo" }, { status: 500 });
   }
 }
@@ -31,6 +33,7 @@ export const DELETE = async (request: Request) => {
     }
     return Response.json({ message: "Todo deleted" }, { status: 200 });
   } catch (error) {
+    console.error("Delete todo error:", error);
     return Response.json({ error: "Failed to delete todo" }, { status: 500 });
   }
 }
@@ -44,6 +47,7 @@ export const PUT = async (request: Request) => {
     }
     return Response.json(result.rows[0]);
   } catch (error) {
-    return Response.json({ error: "Failed to delete todo" }, { status: 500 });
+    console.error("Update todo error:", error);
+    return Response.json({ error: "Failed to update todo" }, { status: 500 });
   }
 }

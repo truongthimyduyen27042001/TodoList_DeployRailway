@@ -22,29 +22,30 @@
         "name": "next"
       }
     ],
-    "baseUrl": "app/",
+    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./*"
+        "./app/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./app/components/*"
       ],
       "@/styles/*": [
-        "./styles/*"
+        "./app/styles/*"
       ],
       "@/utils/*": [
-        "./utils/*"
+        "./app/utils/*"
       ]
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
     "next-env.d.ts",
-    "build/types/**/*.ts"
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".next",
+    "build"
   ]
 }
