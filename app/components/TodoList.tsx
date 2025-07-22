@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import TodoForm from "./TodoForm";
 import TodoItem from "./TodoItem";
-import styles from "../styles/TodoList.module.css";
+import styles from "@/styles/TodoList.module.css";
 import { addTodo, deleteTodo, getTodos, updateTodo } from "../utils/api";
 
 export type Todo = {
