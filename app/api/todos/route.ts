@@ -3,8 +3,10 @@ import { db } from "./db";
 export const GET = async () => {
   try {
     const todos = await db.query("SELECT * FROM todos");
+    console.log("todos: ", todos)
     return Response.json(todos.rows);
   } catch (error) {
+    console.log("error: ", error)
     return Response.json({ error: "Failed to get todos" }, { status: 500 });
   }
 }
