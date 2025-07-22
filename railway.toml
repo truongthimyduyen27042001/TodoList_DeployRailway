@@ -4,4 +4,8 @@ builder = "dockerfile"
 [deploy]
 healthcheckPath = "/api/todos"
 healthcheckTimeout = 300
-restartPolicyType = "on_failure" 
+restartPolicyType = "on_failure"
+
+# Ensure migrations run before starting the app
+[deploy.variables]
+RUN_MIGRATIONS = "true" 
