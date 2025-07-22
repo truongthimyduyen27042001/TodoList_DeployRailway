@@ -4,10 +4,10 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json* ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including devDependencies for build)
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -19,6 +19,12 @@ RUN npm run build
 FROM node:18-alpine AS runner
 
 WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+
+# Install only production dependencies
+RUN npm install --production && npm cache clean --force
 
 # Copy built application
 COPY --from=builder /app/.next/standalone ./
