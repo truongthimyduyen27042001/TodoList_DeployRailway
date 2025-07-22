@@ -46,6 +46,7 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (currentTodo && currentTodo.text.trim()) {
+      console.log("currentTodo: ", currentTodo);
       const todo = await updateTodo(currentTodo.id, currentTodo.text.trim());
       setTodos(prev => prev.map(t => t.id === todo.id ? todo : t));
       setCurrentTodo(undefined);
@@ -55,6 +56,16 @@ export default function TodoList({ initialTodos }: TodoListProps) {
   const handleEditClose = () => {
     setCurrentTodo(undefined);
   };
+
+  // Load todos on component mount
+  useEffect(() => {
+    getTodos().then(data => {
+      console.log("data: ", data);
+      setTodos(data);
+    }).catch(error => {
+      console.error("Failed to load todos:", error);
+    });
+  }, []);
 
   return (
     <div className={styles.container}>

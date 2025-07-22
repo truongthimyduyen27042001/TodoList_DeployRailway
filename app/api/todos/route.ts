@@ -22,6 +22,7 @@ export const GET = async () => {
     console.log("todos: ", todos)
     return Response.json(todos.rows);
   } catch (error) {
+    console.error("Get todos error:", error);
     return Response.json({ error: "Failed to get todos" }, { status: 500 });
   }
 }

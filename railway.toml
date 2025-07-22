@@ -5,6 +5,8 @@ builder = "dockerfile"
 healthcheckPath = "/api/todos"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
+# Start command includes migration
+startCommand = "npm run migrate && node server.js"
 
 # Ensure migrations run before starting the app
 [deploy.variables]
