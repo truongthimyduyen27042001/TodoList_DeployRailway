@@ -12,13 +12,17 @@ export type Todo = {
   completed: boolean;
 };
 
-export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+type TodoListProps = {
+  initialTodos: Todo[];
+}
+
+export default function TodoList({ initialTodos }: TodoListProps) {
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [currentTodo, setCurrentTodo] = useState<Todo | undefined>();
 
   const handleAdd = async (text: string) => {
     const newTodo = await addTodo(text);
-    setTodos((prev) => [...prev, newTodo]);
+    setTodos((prev) => [...prev, newTodo.data]);
   };
 
   const handleToggle = (id: number) => {

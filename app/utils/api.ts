@@ -1,12 +1,21 @@
-const API_URL = "http://localhost:4000/api/todos";
+const API_URL = "/api/todos";
+
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    return "";
+  }
+  return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+};
 
 export const getTodos = async () => {
-  const response = await fetch(API_URL);
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${API_URL}`);
   return response.json();
 };
 
 export const addTodo = async (text: string) => {
-  const response = await fetch(API_URL, {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${API_URL}`, {
     method: "POST",
     body: JSON.stringify({ text }),
     headers: {
@@ -18,8 +27,10 @@ export const addTodo = async (text: string) => {
 
 
 export const deleteTodo = async (id: number) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${API_URL}`, {
     method: "DELETE",
+    body: JSON.stringify({ id }),
     headers: {
       "Content-Type": "application/json",
     },
@@ -28,9 +39,10 @@ export const deleteTodo = async (id: number) => {
 };
 
 export const updateTodo = async (id: number, text: string) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${API_URL}`, {
     method: "PUT",
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ id, text }),
     headers: {
       "Content-Type": "application/json",
     },

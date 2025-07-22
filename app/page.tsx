@@ -1,5 +1,7 @@
 import TodoList from "./components/TodoList";
+import { getTodos } from "./utils/api";
 
-export default function HomePage() {
-  return <TodoList />;
+export default async function HomePage() {
+  const todos = await getTodos();
+  return <TodoList initialTodos={todos} />;
 }
