@@ -21,7 +21,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Copy package files and migration script
-COPY package.json package-lock.json* migrate.js ./
+COPY package.json package-lock.json* ./
 
 # Install only production dependencies
 RUN npm install --production && npm cache clean --force

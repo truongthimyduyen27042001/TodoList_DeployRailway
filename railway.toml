@@ -5,4 +5,4 @@ builder = "dockerfile"
 healthcheckPath = "/api/todos"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
-startCommand = "npm run migrate && node server.js" 
+startCommand = "node server.js" 
