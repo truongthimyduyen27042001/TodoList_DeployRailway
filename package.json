@@ -7,7 +7,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "node scripts/migrate.js",
     "postbuild": "echo 'Build completed successfully'"
   },
   "dependencies": {
