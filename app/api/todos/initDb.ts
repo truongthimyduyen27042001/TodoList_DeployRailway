@@ -18,8 +18,5 @@ export async function initDatabase() {
   }
 }
 
-// Auto-initialize on import
-initDatabase().catch(console.error);
-
 
 
