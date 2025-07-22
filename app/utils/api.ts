@@ -8,9 +8,7 @@ const getBaseUrl = () => {
 };
 
 export const getTodos = async () => {
-  console.log("API /api/todos called");
   const baseUrl = getBaseUrl();
-  console.log('baseUrl', baseUrl);
   const response = await fetch(`${baseUrl}${API_URL}`);
   return response.json();
 };
