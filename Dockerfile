@@ -20,8 +20,8 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# Copy package files and migration script
-COPY package.json package-lock.json* migrate.js ./
+# Copy package files, migration script, and startup script
+COPY package.json package-lock.json* migrate.js start.sh ./
 
 # Install only production dependencies
 RUN npm install --production && npm cache clean --force
@@ -37,6 +37,10 @@ RUN adduser -S nextjs -u 1001
 
 # Change ownership
 RUN chown -R nextjs:nodejs /app
+
+# Make startup script executable
+RUN chmod +x start.sh
+
 USER nextjs
 
 EXPOSE 3000
@@ -44,6 +48,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV NODE_ENV=production
 
-RUN npm run migrate
+# Remove the RUN npm run migrate line - we'll run it in CMD
+# RUN npm run migrate
 
-CMD ["node", "server.js"]
+CMD ["./start.sh"]

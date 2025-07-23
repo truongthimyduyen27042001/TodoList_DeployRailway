@@ -2,17 +2,21 @@ const { Pool } = require('pg');
 
 console.log('🚀 Starting database migration...');
 
+// Check if DATABASE_URL is available
+if (!process.env.DATABASE_URL) {
+  console.error('❌ DATABASE_URL environment variable is not set');
+  console.log('💡 Please ensure DATABASE_URL is configured in Railway');
+  process.exit(1);
+}
+
 // Database connection configuration
-const connectionConfig = process.env.DATABASE_URL ? {
+const connectionConfig = {
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-} : {
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT) || 5432,
-  user: process.env.DB_USER || 'todo_user',
-  password: process.env.DB_PASSWORD || 'password123',
-  database: process.env.DB_NAME || 'todo_db',
 };
+
+console.log('🔗 Connecting to database...');
+console.log('📍 Database host:', new URL(process.env.DATABASE_URL).hostname);
 
 const db = new Pool(connectionConfig);
 
@@ -38,6 +42,7 @@ async function runMigrations() {
     
   } catch (error) {
     console.error('❌ Database migration failed:', error.message);
+    console.error('🔍 Error details:', error);
     process.exit(1);
   }
 }
