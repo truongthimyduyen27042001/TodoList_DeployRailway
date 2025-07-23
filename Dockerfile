@@ -21,7 +21,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 # Copy package files and migration script
-COPY package.json package-lock.json* ./
+COPY package.json package-lock.json* migrate.js ./
 
 # Install only production dependencies
 RUN npm install --production && npm cache clean --force
@@ -43,5 +43,7 @@ EXPOSE 3000
 
 ENV PORT=3000
 ENV NODE_ENV=production
+
+RUN npm run migrate
 
 CMD ["node", "server.js"]
