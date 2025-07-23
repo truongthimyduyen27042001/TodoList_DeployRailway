@@ -2,21 +2,65 @@ const { Pool } = require('pg');
 
 console.log('🚀 Starting database migration...');
 
-// Check if DATABASE_URL is available
-if (!process.env.DATABASE_URL) {
-  console.error('❌ DATABASE_URL environment variable is not set');
-  console.log('💡 Please ensure DATABASE_URL is configured in Railway');
-  process.exit(1);
-}
-
 // Database connection configuration
-const connectionConfig = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-};
+let connectionConfig;
 
-console.log('🔗 Connecting to database...');
-console.log('📍 Database host:', new URL(process.env.DATABASE_URL).hostname);
+console.log("check process.env 1111: ", {
+  databaseUrl: process.env.DATABASE_URL,
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+})
+
+
+if (process.env.DATABASE_URL) {
+  // Use DATABASE_URL if available
+  try {
+    const url = new URL(process.env.DATABASE_URL);
+    console.log('🔗 Connecting to database using DATABASE_URL...');
+    console.log('📍 Database host:', url.hostname);
+    console.log('📍 Database port:', url.port);
+    console.log('📍 Database name:', url.pathname.substring(1));
+    
+    connectionConfig = {
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    };
+  } catch (error) {
+    console.error('❌ Invalid DATABASE_URL format:', process.env.DATABASE_URL);
+    console.error('💡 Expected format: postgresql://user:password@host:port/database');
+    console.error('🔍 Error:', error.message);
+    process.exit(1);
+  }
+} else {
+  // Use individual environment variables
+  console.log('🔗 Connecting to database using individual environment variables...');
+  
+  const requiredVars = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  
+  if (missingVars.length > 0) {
+    console.error('❌ Missing required environment variables:', missingVars.join(', '));
+    console.error('💡 Please set DATABASE_URL or all individual DB variables');
+    process.exit(1);
+  }
+  
+  connectionConfig = {
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  };
+  
+  console.log('📍 Database host:', process.env.DB_HOST);
+  console.log('📍 Database port:', process.env.DB_PORT);
+  console.log('📍 Database name:', process.env.DB_NAME);
+}
 
 const db = new Pool(connectionConfig);
 
